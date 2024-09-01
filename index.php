@@ -6,11 +6,29 @@ include 'shared/header.php';
 <body>
     <?php include 'shared/nav.php' ?>
 
-    <div class="bg-blue-300 w-full h-[300px] flex flex-col justify-center items-center">
-        <h1 class="text-center text-red-600 text-3xl font-semibold">Online Store Demo</h1>
+    
 
-        <p class="text-center text-white pt-4">You will Fiond the best product ever and get market best price</p>
+    <div class="mx-[40px]">
+        <?php include 'shared/banner.php' ?>
     </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.slider').slick({
+                dots: true, 
+                infinite: true,
+                speed: 300, 
+                slidesToShow: 1, 
+                adaptiveHeight: true,
+                autoplay: true, 
+                autoplaySpeed: 2000, 
+                arrows: true,
+                prevArrow: '<button type="button" class="slick-prev">Previous</button>',
+                nextArrow: '<button type="button" class="slick-next">Next</button>',
+            });
+        });
+    </script>
 </body>
 
 </html>
