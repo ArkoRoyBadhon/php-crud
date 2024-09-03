@@ -1,3 +1,7 @@
+<?php
+session_start();
+
+?>
 <div class="flex justify-between items-center px-[40px] mb-[20px] border-b-2 py-6">
     <h1 class="text-2xl font-bold">Navbar</h1>
     <ul class="flex items-center gap-[20px] font-semibold">
@@ -12,6 +16,15 @@
         </li>
         <li class="">
             <a href="cart.php" class="">Cart</a>
+        </li>
+        <li class="">
+            <?php
+            if (!isset($_SESSION["user"])) {
+                echo '<a href="login.php" class="">Login</a>';
+            } else {
+                echo '<a href="logout.php" class="">LogOut</a>';
+            }
+            ?>
         </li>
     </ul>
 </div>

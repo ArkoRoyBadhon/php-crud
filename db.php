@@ -1,6 +1,7 @@
 <?php
+
 $host = "localhost";
-$dbname = "store";
+$dbname = "auth";
 $dbusername = "root";
 $dbpassword = "";
 
@@ -11,4 +12,4 @@ try {
 } catch (PDOException $e) {
     die("Connection failed error:" . $e->getMessage());
 }
-?>
+

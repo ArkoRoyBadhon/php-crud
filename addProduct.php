@@ -1,6 +1,8 @@
 <?php
+
 include "shared/header.php";
 include "cfg/dbconnect.php";
+
 $err_flag = false;
 $name_err = $price_err = $description_err = $category_err = $tag_err = $brand_err = "";
 $name = $price = $description = $category = $tag = $brand = "";
@@ -13,99 +15,106 @@ if (isset($_POST['submit'])) {
     $tag = trim($_POST['tag']);
     $brand = trim($_POST['brand']);
 
-    if (empty(($name))) {
+    if (empty($name)) {
         $name_err = 'Enter Name';
         $err_flag = true;
     }
-    if (empty(($price))) {
+    if (empty($price)) {
         $price_err = 'Enter price';
         $err_flag = true;
     }
 
-    if (empty(($description))) {
+    if (empty($description)) {
         $description_err = 'Enter description';
         $err_flag = true;
     }
-    if (empty(($category))) {
+    if (empty($category)) {
         $category_err = 'Enter category';
         $err_flag = true;
     }
-    if (empty(($tag))) {
+    if (empty($tag)) {
         $tag_err = 'Enter tag';
         $err_flag = true;
     }
-    if (empty(($brand))) {
+    if (empty($brand)) {
         $brand_err = 'Enter brand';
         $err_flag = true;
     }
 
     if (!$err_flag) {
-        $sql = "insert into product(name, price, decription, category, tag, brand) values (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO product (name, price, description, category, tag, brand) VALUES (?, ?, ?, ?, ?, ?)";
         try {
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sissss", $name, $price, $description, $category, $tag, $brand);
-            $stmt->execute();
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$name, $price, $description, $category, $tag, $brand]);
             echo "Product Added";
-            header("location:index.php");
+            header("Location: index.php");
+            exit; // Ensure script stops executing after redirect
         } catch (Exception $e) {
             echo $e->getMessage();
         }
     }
 }
-
 ?>
 
 <body>
     <?php include 'shared/nav.php' ?>
+    <?php
+    if (isset($_SESSION["user"]["role"]) == "user") {
+        header("Location: index.php");
+    }
+    ?>
 
-    <div class="container flex flex-col justify-center items-center">
-        <h1 class="text-center text-2xl font-semibold">ADD Product</h1>
-        <form action="" method="post" class="w-[400px] border p-6 mt-[40px]">
-            <div class="mb-3 w-full">
-                <label for="name" class="">Name</label>
-                <br>
-                <input type="text" name="name" id="name" placeholder="Enter Name" class="border outline outline-1" value="<?= $name ?>">
-                <div class="text-red-400"><?= $name_err ?></div>
+    <div class="container mx-auto p-8 flex flex-col justify-center items-center">
+        <h1 class="text-2xl font-semibold mb-6">Add Product</h1>
+        <form action="" method="post" class="w-full max-w-lg bg-white shadow-md rounded-lg p-8">
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                <input type="text" name="name" id="name" placeholder="Enter Name"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value="<?= $name ?>">
+                <div class="text-red-500 text-sm"><?= $name_err ?></div>
             </div>
-            <div class="mb-3">
-                <label for="price" class="">Price</label>
-                <br>
-                <input type="number" name="price" id="price" placeholder="Enter Price" class="outline outline-1" value="<?= $price ?>">
-                <div class="text-red-400"><?= $price_err ?></div>
+            <div class="mb-4">
+                <label for="price" class="block text-gray-700 text-sm font-bold mb-2">Price</label>
+                <input type="number" name="price" id="price" placeholder="Enter Price"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value="<?= $price ?>">
+                <div class="text-red-500 text-sm"><?= $price_err ?></div>
             </div>
-            <div class="mb-3">
-                <label for="description" class="">Description</label>
-                <br>
-                <textarea type="text" name="description" id="description" placeholder="Enter Description"
-                    class="outline outline-1"><?= $description ?></textarea>
-                <div class="text-red-400"><?= $description_err ?></div>
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                <textarea name="description" id="description" placeholder="Enter Description"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"><?= $description ?></textarea>
+                <div class="text-red-500 text-sm"><?= $description_err ?></div>
             </div>
-            <div class="mb-3">
-                <label for="category" class="">category</label>
-                <br>
-                <textarea type="text" name="category" id="category" placeholder="Enter category"
-                    class="outline outline-1"><?= $category ?></textarea>
-                <div class="text-red-400"><?= $category_err ?></div>
+            <div class="mb-4">
+                <label for="category" class="block text-gray-700 text-sm font-bold mb-2">Category</label>
+                <textarea name="category" id="category" placeholder="Enter Category"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"><?= $category ?></textarea>
+                <div class="text-red-500 text-sm"><?= $category_err ?></div>
             </div>
-            <div class="mb-3">
-                <label for="tag" class="">tag</label>
-                <br>
-                <textarea type="text" name="tag" id="tag" placeholder="Enter tag"
-                    class="outline outline-1"><?= $tag ?></textarea>
-                <div class="text-red-400"><?= $tag_err ?></div>
+            <div class="mb-4">
+                <label for="tag" class="block text-gray-700 text-sm font-bold mb-2">Tag</label>
+                <textarea name="tag" id="tag" placeholder="Enter Tag"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"><?= $tag ?></textarea>
+                <div class="text-red-500 text-sm"><?= $tag_err ?></div>
             </div>
-            <div class="mb-3">
-                <label for="brand" class="">brand</label>
-                <br>
-                <textarea type="text" name="brand" id="brand" placeholder="Enter brand"
-                    class="outline outline-1"><?= $brand ?></textarea>
-                <div class="text-red-400"><?= $brand_err ?></div>
+            <div class="mb-4">
+                <label for="brand" class="block text-gray-700 text-sm font-bold mb-2">Brand</label>
+                <textarea name="brand" id="brand" placeholder="Enter Brand"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"><?= $brand ?></textarea>
+                <div class="text-red-500 text-sm"><?= $brand_err ?></div>
             </div>
-
-            <button type="submit" class="px-6 py-2 border rounded-md bg-green-400" name="submit">
-                Submit
-            </button>
-            <a href="index.php" class="px-6 py-2 border rounded-md bg-red-400">Cancel</a>
+            <div class="flex items-center justify-between">
+                <button type="submit" name="submit"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Submit
+                </button>
+                <a href="index.php"
+                    class="inline-block align-baseline font-bold text-sm text-red-500 hover:text-red-800">
+                    Cancel
+                </a>
+            </div>
         </form>
     </div>
 </body>
