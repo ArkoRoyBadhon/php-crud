@@ -59,8 +59,9 @@ if (isset($_POST['submit'])) {
 <body>
     <?php include 'shared/nav.php' ?>
     <?php
-    if (isset($_SESSION["user"]["role"]) == "user") {
+    if (isset($_SESSION["user"]) && $_SESSION["user"]["role"] != "admin") {
         header("Location: index.php");
+        exit;
     }
     ?>
 
